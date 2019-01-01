@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+		<link href="./style.css" rel="stylesheet" type="text/css"/>
+	</head>
+	<body>
+		<div id="app">
+			<nav class="navbar">
+				<div class="container">
+					<div class="navbar-brand">
+						<a class="navbar-item brand-text" href="#">MuCrossV2</a>
+					</div>
+				</div>
+			</nav>
+			<div class="container">
+				<div>
+					<svg viewbox="0 0 300 300" width="600" height="600">
+						<!-- rale -->
+						<g transform="translate(120,0)scale(-1,1)translate(-120,0)">
+							<template v-for="n in rale.length">
+								<rect v-for="k in 4" :x="(n-1)*10" :y="(k-1)*10" width="9" height="9" :fill="rale[n-1]==(k-1)? 'black':'#fed'"
+								 @click="setRale(n,k)"/>
+							</template>
+						</g>
+						<!-- link -->
+						<g transform="translate(250,0)">
+							<template v-for="n in 4">
+								<rect v-for="k in 4" :x="(n-1)*10" :y="(k-1)*10" width="9" height="9" :fill="link[n-1][k-1]? 'black':'#dfe'" 
+								@click="setLink(n,k)"/>
+							</template>
+						</g>
+						<!-- cell -->
+						<g transform="translate(120,0)scale(-1,1)translate(-120,50)">
+							<template v-for="n in downUps.length">
+								<rect v-for="k in rale.length+1" :x="(k-1)*10" :y="(n-1)*10" width="9" height="9" :fill="cells[n-1][k-1]? 'black':'#fde'" />
+							</template>
+						</g>
+						<!-- pedal -->
+						<g transform="translate(250,50)">
+							<template v-for="n in pedal.length">
+								<rect v-for="k in 4" :x="(k-1)*10" :y="(n-1)*10" width="9" height="9" :fill="pedal[n-1]==(k-1)? 'black':'#def'"
+								@click="setPedal(n,k)" />
+							</template>
+						</g>
+					</svg>
+					
+				</div>
+			</div>
+
+		</div>
+		<script src="https://unpkg.com/vue/dist/vue.js"></script>
+		
+		<script>
+			var vm= new Vue({
+				el:'#app',
+				data:{
+					rale:[],
+					pedal:[],
+					link:[//ペダルXがそうこうYにつながっているので配列の見た目と表示順が違う(配列左側が表示時上になる)。注意
+						[true,false,false,false],
+						[false,true,false,false],
+						[false,false,true,false],
+						[false,false,false,true]
+					],
+				},
+				methods:{
+					setRale(n,k){
+						this.rale.splice(n-1, 1, k-1);
+					},
+					setLink(n,k){
+						this.link[n-1].splice(k-1, 1, !this.link[n-1][k-1]);
+					},
+					setPedal(n,k){
+						this.pedal.splice(n-1, 1, k-1);
+					}
+				},
+				computed:{
+					downUps:function(){
+						var arr = [];
+						for(var i=0;i<this.pedal.length;i++){
+							arr.push([]);
+							for(var k=0;k<4;k++){
+								arr[i].push(this.link[this.pedal[i]][k]);
+							}
+						}
+						return arr;
+					},
+					cells:function(){
+						var arr = [];
+						for(var i=0;i<this.downUps.length;i++){
+							arr.push([]);
+							for(var k=0;k<this.rale.length;k++){
+								arr[i].push(this.downUps[i][this.rale[k]]);
+							}
+						}
+						return arr;
+					}
+				},
+				created:function(){
+					for(var i=0;i<24;i++){
+						this.rale.push(0);
+						this.pedal.push(0);
+					}
+				},
+				mounted:function(){
+				}
+			});
+		</script>
+
+  </body>
+
+</html>
