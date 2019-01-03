@@ -35,7 +35,8 @@
 						<!-- cell -->
 						<g transform="translate(120,0)scale(-1,1)translate(-120,50)">
 							<template v-for="n in downUps.length">
-								<rect v-for="k in rale.length+1" :x="(k-1)*10" :y="(n-1)*10" width="9" height="9" :fill="cells[n-1][k-1]? 'black':'#fde'" />
+								<rect v-if="cells[n-1][k-1]" v-for="k in rale.length+1" :x="(k-1)*10+1" :y="(n-1)*10" width="9" height="11" :fill="'black'" />
+								<rect v-if="!cells[n-1][k-1]" v-for="k in rale.length+1" :x="(k-1)*10" :y="(n-1)*10+1" width="11" height="9" :fill="'white'" />
 							</template>
 						</g>
 						<!-- pedal -->
