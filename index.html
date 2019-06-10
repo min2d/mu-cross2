@@ -1,136 +1,109 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-		<link rel="stylesheet" href="./bulma_ud.css">
-		<link href="./style.css" rel="stylesheet" type="text/css"/>
-	</head>
-	<body>
-		<div id="app">
-			<nav class="navbar">
-				<div class="container">
-					<div class="navbar-brand">
-						<a class="navbar-item brand-text" href="#">MuCrossV2</a>
-					</div>
-				</div>
-			</nav>
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="./bulma_ud.css">
+	<link href="./style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="app">
+		<nav class="navbar">
 			<div class="container">
-				<div>
+				<div class="navbar-brand">
+					<a class="navbar-item brand-text" href="#">MuCrossV2</a>
+				</div>
+			</div>
+		</nav>
+
+		<section class="section">
+			
+
+			<div class="container">
+				<div class="tabs is-boxed">
+					<ul>
+						<li class="is-active"><a>N-1</a></li>
+						<li><a>1-1</a></li>
+					</ul>
+				</div>
+				<div class="panel">
 					<button @click="allRandom()" class="button">ALL Random</button>
 				</div>
-				<div>
-					<svg viewbox="0 0 300 300" width="600" height="600">
-						<!-- rale -->
-						<g transform="translate(120,0)scale(-1,1)translate(-120,0)">
-							<template v-for="n in rale.length">
-								<rect v-for="k in 4" :x="(n-1)*10" :y="(k-1)*10" width="9" height="9" :fill="rale[n-1]==(k-1)? 'black':'#fed'"
-								 @click="setRale(n,k)"/>
-							</template>
-						</g>
-						<!-- link -->
-						<g transform="translate(250,0)">
-							<template v-for="n in 4">
-								<rect v-for="k in 4" :x="(n-1)*10" :y="(k-1)*10" width="9" height="9" :fill="link[n-1][k-1]? 'black':'#dfe'" 
-								@click="setLink(n,k)"/>
-							</template>
-						</g>
-						<!-- cell -->
-						<g transform="translate(120,0)scale(-1,1)translate(-120,50)">
-							<template v-for="n in downUps.length">
-								<rect v-if="cells[n-1][k-1]" v-for="k in rale.length+1" :x="(k-1)*10+1" :y="(n-1)*10" width="9" height="11" :fill="'#003399'" />
-								<rect v-if="!cells[n-1][k-1]" v-for="k in rale.length+1" :x="(k-1)*10" :y="(n-1)*10+1" width="11" height="9" :fill="'#FF97C2'" />
-							</template>
-						</g>
-						<!-- pedal -->
-						<g transform="translate(250,50)">
-							<template v-for="n in pedal.length">
-								<rect v-for="k in 4" :x="(k-1)*10" :y="(n-1)*10" width="9" height="9" :fill="pedal[n-1]==(k-1)? 'black':'#def'"
-								@click="setPedal(n,k)" />
-							</template>
-						</g>
-					</svg>
-					
+				<div class="panel">
+					<table class="table">
+
+						<tr>
+							<td>
+								<svg :width="raleAreaWidth" :height="raleAreaHeight"
+									:viewbox="`0 0 ${raleAreaWidth} ${raleAreaHeight}`">
+									<!-- rale -->
+									<g :transform="`scale(-1,1)translate(-${raleAreaWidth},0)`">
+										<template v-for="n in numOfTextileCell">
+											<rect v-for="k in numOfRale" :x="(n-1)*cellSizeWithMargin"
+												:y="(k-1)*cellSizeWithMargin" :width="cellSize" :height="cellSize"
+												:fill="rale[n-1]==(k-1)? 'black':'#fed'" @click="setRale(n,k)" />
+										</template>
+									</g>
+								</svg>
+							</td>
+							<td>
+								<svg :width="pedalAreaWidth" :height="raleAreaHeight"
+									:viewbox="`0 0 ${pedalAreaWidth} ${raleAreaHeight}`">
+									<!-- link -->
+									<g>
+										<template v-for="n in numOfPedal">
+											<rect v-for="k in numOfRale" :x="(n-1)*cellSizeWithMargin"
+												:y="(k-1)*cellSizeWithMargin" :width="cellSize" :height="cellSize"
+												:fill="link[n-1][k-1]? 'black':'#dfe'" @click="setLink(n,k)" />
+										</template>
+									</g>
+								</svg>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<svg :width="raleAreaWidth" :height="pedalAreaHeight"
+									:viewbox="`0 0 ${raleAreaWidth} ${pedalAreaHeight}`">
+									<!-- cell -->
+									<g :transform="`scale(-1,1)translate(-${raleAreaWidth},0)`">
+										<template v-for="n in downUps.length">
+											<rect v-if="cells[n-1][k-1]" v-for="k in rale.length+1"
+												:x="(k-1)*cellSizeWithMargin + cellMargin" :y="(n-1)*cellSizeWithMargin"
+												:width="cellSize" :height="cellSize+(cellMargin)*2" :fill="'#003399'" />
+											<rect v-if="!cells[n-1][k-1]" v-for="k in rale.length+1"
+												:x="(k-1)*cellSizeWithMargin" :y="(n-1)*cellSizeWithMargin + cellMargin"
+												:width="cellSize+(cellMargin)*2" :height="cellSize" :fill="'#FF97C2'" />
+										</template>
+									</g>
+								</svg>
+							</td>
+							<td>
+								<svg :width="pedalAreaWidth" :height="pedalAreaHeight" :viewbox="`0 0 ${pedalAreaWidth} ${pedalAreaHeight}`">
+									<g>
+										<template v-for="n in pedal.length">
+											<rect v-for="k in numOfPedal" :x="(k-1)*cellSizeWithMargin" :y="(n-1)*cellSizeWithMargin" :width="cellSize" :height="cellSize"
+												:fill="pedal[n-1]==(k-1)? 'black':'#def'" @click="setPedal(n,k)" />
+										</template>
+									</g>
+								</svg>
+							</td>
+						</tr>
+					</table>
+
+
 				</div>
 			</div>
 
-		</div>
-		<script src="./vue.js"></script>
-		
-		<script>
-			var vm= new Vue({
-				el:'#app',
-				data:{
-					rale:[],
-					pedal:[],
-					link:[//ペダルXがそうこうYにつながっているので配列の見た目と表示順が違う(配列左側が表示時上になる)。注意
-						[true,false,false,false],
-						[false,true,false,false],
-						[false,false,true,false],
-						[false,false,false,true]
-					],
-				},
-				methods:{
-					//n,kは1から始まる。vueの仕組みにあわせた
-					setRale(n,k){
-						this.rale.splice(n-1, 1, k-1);
-					},
-					setLink(n,k){
-						this.link[n-1].splice(k-1, 1, !this.link[n-1][k-1]);
-					},
-					setPedal(n,k){
-						this.pedal.splice(n-1, 1, k-1);
-					},
-					allRandom(){
-						var v= 1+Math.floor(Math.random()*4);
-						this.setPedal(1,v);
-						for(var i=1;i<=this.pedal.length;i++){
-							do{
-								v= 1+Math.floor(Math.random()*4);
-								//i番目のひとつまえはi-1番目だが、配列的には0番目が存在するためi-2番目
-								//（これなんとかしたい）
-							}while(v==this.pedal[i-2]+1)
-							do{
-								w= 1+Math.floor(Math.random()*4);
-							}while(w==this.rale[i-2]+1)
-							this.setPedal(i,v);
-							this.setRale(i,w);
-						}
-					}
-				},
-				computed:{
-					downUps:function(){
-						var arr = [];
-						for(var i=0;i<this.pedal.length;i++){
-							arr.push([]);
-							for(var k=0;k<4;k++){
-								arr[i].push(this.link[this.pedal[i]][k]);
-							}
-						}
-						return arr;
-					},
-					cells:function(){
-						var arr = [];
-						for(var i=0;i<this.downUps.length;i++){
-							arr.push([]);
-							for(var k=0;k<this.rale.length;k++){
-								arr[i].push(this.downUps[i][this.rale[k]]);
-							}
-						}
-						return arr;
-					}
-				},
-				created:function(){
-					for(var i=0;i<24;i++){
-						this.rale.push(i%4);
-						this.pedal.push(i%4);
-					}
-				},
-				mounted:function(){
-				}
-			});
-		</script>
+		</section>
 
-  </body>
+
+	</div>
+	<script src="./vue.js"></script>
+
+	<script src="./script.js"></script>
+
+</body>
 
 </html>
