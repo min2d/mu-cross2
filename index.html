@@ -19,13 +19,11 @@
 		</nav>
 
 		<section class="section">
-			
-
 			<div class="container">
-				<div class="tabs is-boxed">
+				<div class="tabs is-toggle">
 					<ul>
-						<li class="is-active"><a>N-1</a></li>
-						<li><a>1-1</a></li>
+						<li :class="{'is-active':isN1Mode}" @click="btnN1Clicked"><a>N-1</a></li>
+						<li :class="{'is-active':!isN1Mode}" @click="btn11Clicked"><a>1-1</a></li>
 					</ul>
 				</div>
 				<div class="panel">
@@ -33,7 +31,6 @@
 				</div>
 				<div class="panel">
 					<table class="table">
-
 						<tr>
 							<td>
 								<svg :width="raleAreaWidth" :height="raleAreaHeight"
@@ -91,14 +88,9 @@
 							</td>
 						</tr>
 					</table>
-
-
 				</div>
 			</div>
-
 		</section>
-
-
 	</div>
 	<script src="./vue.js"></script>
 

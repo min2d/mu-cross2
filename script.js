@@ -1,6 +1,7 @@
 var vm = new Vue({
     el: '#app',
     data: {
+        isN1Mode: true,
         numOfTextileCell:24,
         cellSize: 18,
         cellMargin: 2,
@@ -11,6 +12,12 @@ var vm = new Vue({
         link: [],//配列の見た目と表示順が違う(配列左側が表示時上になる)。注意。[ペダル本目][レールナンバー]。
     },
     methods: {
+        btn11Clicked(){
+            this.isN1Mode = false;
+        },
+        btnN1Clicked(){
+            this.isN1Mode = true;
+        },
         //n,kは1から始まる。vueの仕組みにあわせた
         setRale(n, k) {
             this.rale.splice(n - 1, 1, k - 1);
