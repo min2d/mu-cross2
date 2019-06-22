@@ -40,6 +40,21 @@
 					<table class="table">
 						<tr>
 							<td>
+								<div class="has-text-centered title">
+									{{textileCol}}
+								</div>
+							</td>
+							<td>
+								<div class="has-text-centered title">
+									{{numOfPedal}}
+								</div>
+								numOfPedalN1は変更できるようにする
+							</td>
+							<td></td>
+						</tr>
+
+						<tr>
+							<td>
 								<!-- rale -->
 								<svg :width="raleAreaWidth" :height="raleAreaHeight"
 									:viewbox="`0 0 ${raleAreaWidth} ${raleAreaHeight}`">
@@ -75,6 +90,11 @@
 										</template>
 									</g>
 								</svg>
+							</td>
+							<td>
+								<div class="title">
+									{{numOfRale}}
+								</div>
 							</td>
 						</tr>
 						<tr>
@@ -113,6 +133,11 @@
 										</template>
 									</g>
 								</svg>
+							</td>
+							<td>
+								<div class="title">
+									{{textileRow}}
+								</div>
 							</td>
 						</tr>
 					</table>
