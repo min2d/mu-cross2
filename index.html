@@ -24,25 +24,27 @@
 		</nav>
 
 		<section class="section">
+
 			<div class="container">
 				<div class="tabs is-toggle">
 					<ul>
-						<li :class="{'is-active':isN1Mode}" @click="btnN1Clicked"><a>N-1</a></li>
-						<li :class="{'is-active':!isN1Mode}" @click="btn11Clicked"><a>1-1</a></li>
+						<li :class="{'is-active': (mode == 'N-1')}" @click="changeModeTo('N-1')"><a>N-1</a></li>
+						<li :class="{'is-active': (mode == '1-1')}" @click="changeModeTo('1-1')"><a>1-1</a></li>
 					</ul>
 				</div>
 				<div class="panel">
 					<button @click="allRandom()" class="button">ALL Random</button>
 				</div>
+
 				<div class="panel">
 					<table class="table">
 						<tr>
 							<td>
+								<!-- rale -->
 								<svg :width="raleAreaWidth" :height="raleAreaHeight"
 									:viewbox="`0 0 ${raleAreaWidth} ${raleAreaHeight}`">
-									<!-- rale -->
 									<g :transform="`scale(-1,1)translate(-${raleAreaWidth},0)`">
-										<template v-for="n in numOfTextileCell">
+										<template v-for="n in rale.length">
 											<rect v-for="k in numOfRale" :x="(n-1)*cellSizeWithMargin"
 												:y="(k-1)*cellSizeWithMargin" :width="cellSize" :height="cellSize"
 												:fill="rale[n-1]==(k-1)? 'black':'#fed'" @click="setRale(n,k)" />
@@ -51,14 +53,25 @@
 								</svg>
 							</td>
 							<td>
+								<!-- link(N-1) -->
 								<svg :width="pedalAreaWidth" :height="raleAreaHeight"
-									:viewbox="`0 0 ${pedalAreaWidth} ${raleAreaHeight}`">
-									<!-- link -->
+									:viewbox="`0 0 ${pedalAreaWidth} ${raleAreaHeight}`" v-if="mode == 'N-1'">
 									<g>
 										<template v-for="n in numOfPedal">
 											<rect v-for="k in numOfRale" :x="(n-1)*cellSizeWithMargin"
 												:y="(k-1)*cellSizeWithMargin" :width="cellSize" :height="cellSize"
-												:fill="link[n-1][k-1]? 'black':'#dfe'" @click="setLink(n,k)" />
+												:fill="linkN1[n-1][k-1]? 'black':'#dfe'" @click="setLinkN1(n,k)" />
+										</template>
+									</g>
+								</svg>
+								<!-- link(1-1) -->
+								<svg :width="pedalAreaWidth" :height="raleAreaHeight"
+									:viewbox="`0 0 ${pedalAreaWidth} ${raleAreaHeight}`" v-if="mode == '1-1'">
+									<g>
+										<template v-for="n in numOfPedal">
+											<rect v-for="k in numOfRale" :x="(n-1)*cellSizeWithMargin"
+												:y="(k-1)*cellSizeWithMargin" :width="cellSize" :height="cellSize"
+												:fill="link11[n-1]==(k-1)? 'black':'#dfe'" @click="setLink11(n,k)" />
 										</template>
 									</g>
 								</svg>
@@ -66,11 +79,11 @@
 						</tr>
 						<tr>
 							<td>
+								<!-- cell -->
 								<svg :width="raleAreaWidth" :height="pedalAreaHeight"
 									:viewbox="`0 0 ${raleAreaWidth} ${pedalAreaHeight}`">
-									<!-- cell -->
 									<g :transform="`scale(-1,1)translate(-${raleAreaWidth},0)`">
-										<template v-for="n in downUps.length">
+										<template v-for="n in cells.length">
 											<rect v-if="cells[n-1][k-1]" v-for="k in rale.length+1"
 												:x="(k-1)*cellSizeWithMargin + cellMargin" :y="(n-1)*cellSizeWithMargin"
 												:width="cellSize" :height="cellSize+(cellMargin)*2" :fill="'#003399'" />
@@ -82,11 +95,21 @@
 								</svg>
 							</td>
 							<td>
-								<svg :width="pedalAreaWidth" :height="pedalAreaHeight" :viewbox="`0 0 ${pedalAreaWidth} ${pedalAreaHeight}`">
+								<!-- pedal(N-1) -->
+								<svg :width="pedalAreaWidth" :height="pedalAreaHeight" :viewbox="`0 0 ${pedalAreaWidth} ${pedalAreaHeight}`" v-if="mode == 'N-1'">
 									<g>
-										<template v-for="n in pedal.length">
+										<template v-for="n in pedalN1.length">
 											<rect v-for="k in numOfPedal" :x="(k-1)*cellSizeWithMargin" :y="(n-1)*cellSizeWithMargin" :width="cellSize" :height="cellSize"
-												:fill="pedal[n-1]==(k-1)? 'black':'#def'" @click="setPedal(n,k)" />
+												:fill="pedalN1[n-1]==(k-1)? 'black':'#def'" @click="setPedalN1(n,k)" />
+										</template>
+									</g>
+								</svg>
+								<!-- pedal(1-1) -->
+								<svg :width="pedalAreaWidth" :height="pedalAreaHeight" :viewbox="`0 0 ${pedalAreaWidth} ${pedalAreaHeight}`" v-if="mode == '1-1'">
+									<g>
+										<template v-for="n in pedal11.length">
+											<rect v-for="k in numOfPedal" :x="(k-1)*cellSizeWithMargin" :y="(n-1)*cellSizeWithMargin" :width="cellSize" :height="cellSize"
+												:fill="pedal11[n-1][k-1]? 'black':'#def'" @click="setPedal11(n,k)" />
 										</template>
 									</g>
 								</svg>
